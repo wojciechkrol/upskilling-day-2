@@ -1,7 +1,5 @@
-import { Link, Tabs } from 'expo-router';
-
-import { HeaderButton } from '../../components/HeaderButton';
-import { TabBarIcon } from '../../components/TabBarIcon';
+import { AntDesign, Feather } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
@@ -12,20 +10,22 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
-          ),
+          title: 'My Card',
+          tabBarIcon: ({ color }) => <AntDesign name="idcard" color={color} size={24} />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="list"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Friends',
+          tabBarIcon: ({ color }) => <Feather name="users" color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="scanner"
+        options={{
+          title: 'Scanner',
+          tabBarIcon: ({ color }) => <AntDesign name="camera" color={color} size={24} />,
         }}
       />
     </Tabs>
