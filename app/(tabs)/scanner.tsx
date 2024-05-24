@@ -21,10 +21,14 @@ export default function CameraScreen() {
       return;
     }
 
-    const profile = JSON.parse(data);
-    if (validateProfile(profile)) {
-      addFriend(profile);
-      setScannedProfile(profile);
+    try {
+      const profile = JSON.parse(data);
+      if (validateProfile(profile)) {
+        addFriend(profile);
+        setScannedProfile(profile);
+      }
+    } catch (e) {
+      // invalid data
     }
   };
 
@@ -54,31 +58,40 @@ export default function CameraScreen() {
             <Text>Camera permission is required to use this feature.</Text>
           </View>
         ) : (
-          <CameraView
-            className="flex-1"
-            barcodeScannerSettings={{
-              barcodeTypes: ['qr'],
-            }}
-            onBarcodeScanned={(data) => {
-              handleBarcodeScanned(data.data);
-            }}>
+          <>
+            <CameraView
+              className="flex-1"
+              barcodeScannerSettings={{
+                barcodeTypes: ['qr'],
+              }}
+              onBarcodeScanned={(data) => {
+                handleBarcodeScanned(data.data);
+              }}
+            />
             <AnimatePresence>
               {scannedProfile !== null && (
                 <MotiView
-                  from={{ opacity: 0, translateY: 100, backgroundColor: 'rgba(0,0,0,0.0)' }}
-                  animate={{ opacity: 1, translateY: 0, backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
-                  exit={{ opacity: 0, translateY: 100, backgroundColor: 'rgba(0,0,0,0.0)' }}
+                  from={{ opacity: 0, backgroundColor: 'rgba(0,0,0,0.0)' }}
+                  animate={{ opacity: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+                  exit={{ opacity: 0, backgroundColor: 'rgba(0,0,0,0.0)' }}
                   transition={{ type: 'timing', duration: 300 }}
-                  className="flex-1">
-                  <Pressable
-                    onPress={clearScannedProfile}
-                    className="flex-1 items-center justify-center">
-                    <ConferenceBadge {...scannedProfile!} />
-                  </Pressable>
+                  className="absolute h-full w-full">
+                  <MotiView
+                    from={{ translateY: 100 }}
+                    animate={{ translateY: 0 }}
+                    exit={{ translateY: 100 }}
+                    transition={{ type: 'timing', duration: 300 }}
+                    className="absolute h-full w-full">
+                    <Pressable
+                      onPress={clearScannedProfile}
+                      className="flex-1 items-center justify-center">
+                      <ConferenceBadge {...scannedProfile!} />
+                    </Pressable>
+                  </MotiView>
                 </MotiView>
               )}
             </AnimatePresence>
-          </CameraView>
+          </>
         )}
       </View>
     </>
